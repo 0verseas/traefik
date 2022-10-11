@@ -1,0 +1,39 @@
+version: "3.7"
+
+networks:
+  bridge:
+    external:
+      name: ${NETWORKS}
+
+services:
+  traefik-dns:
+    image: traefik:v2.6
+    container_name: traefik-dns
+    restart: always
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.api.entrypoints=websecure"
+#      - "traefik.http.routers.api.service=api@internal"
+#      - "traefik.http.routers.api.tls.certresolver=lets-encr"
+#      - "traefik.http.routers.api.rule=Host(`localhost`) && PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+#      - "traefik.http.routers.api.middlewares=basic-auth-global"
+#      - "traefik.http.middlewares.basic-auth-global.basicauth.users=${AUTH_BASIC}"
+#      - "traefik.http.routers.api.tls.domains[0].main=*.overseas.edu.tw"
+#      - "traefik.http.routers.api.tls.domains[0].sans=overseas.edu.tw"
+    environment:
+      - "CF_API_EMAIL=${CF_API_EMAIL}"
+      - "CF_API_KEY=${CF_API_KEY}"
+    ports:
+      # "for traefik dashboard"
+      - 8080:8080
+      - 80:80
+      - 443:443
+      - 8443:8443
+#      - 8000:8000
+#      - 9000:9000
+    networks:
+      - bridge
+    volumes:
+      - ./letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml:ro

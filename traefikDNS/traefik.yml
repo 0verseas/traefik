@@ -1,0 +1,74 @@
+log:
+  level: INFO
+
+api:
+  # "insecure config is true will allow using IP & Http protocol connect Traefik Dashboard. Don't do this in production! "
+  insecure: true
+  dashboard: true
+
+entryPoints:
+  # "for our official websites"
+  web:
+    address: :80
+    # "(Optional) Redirect to HTTPS"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: :443
+
+  # "for our dev websites"
+  webdev:
+    address: :8443
+
+  # "for local api dev"
+#  apidev:
+#    address: :8000
+
+  # "for local frontend dev"
+#  localwebdev:
+#    address: :9000
+
+providers:
+  # "provide traefik docker sock for listen and watch"
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  # "provide traefik SubDirectory(Path) config"
+#  file:
+    # "watch for dynamic configuration changes"
+#    directory: /
+#    watch: true
+  
+# "Configure your CertificateResolver here"
+certificatesResolvers:
+  lets-encr:
+    acme:
+      storage: letsencrypt/acme.json
+      email: joerenyu93@gmail.com 
+      
+      # "letsencrypt certificate official server, don't use this server for multiple apply certificates at the same time, if do will trigger RateLimit, this server is not for test apply certificates"
+      caServer: https://acme-v02.api.letsencrypt.org/directory
+
+      # "letsencrypt certificate test server, no RateLimit"
+#      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+
+      dnsChallenge:
+        provider: cloudflare
+
+#      httpChallenge:
+#        entryPoint: web
+
+# "Subdirectory(Path) config"
+
+#http:
+#  middlewares:
+#    addpaths:
+#        stripPrefix:
+#            prefixes:
+#                - "/survey"
+#                - "/mrbs"
+#            forceSlash: true
