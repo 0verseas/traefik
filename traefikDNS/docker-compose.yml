@@ -2,12 +2,12 @@ version: "3.7"
 
 networks:
   bridge:
-    external:
-      name: ${NETWORKS}
+    external: true
+    name: ${NETWORKS}
 
 services:
   traefik-dns:
-    image: traefik:v2.6
+    image: traefik:latest
     container_name: traefik-dns
     restart: always
 #    labels:
