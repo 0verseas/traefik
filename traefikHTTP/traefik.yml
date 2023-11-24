@@ -96,6 +96,10 @@ http:
           - "https://student.oyvtp.org"
           - "https://school.oyvtp.org"
           - "https://office.oyvtp.org"
+          - "https://api.oyvtp.org:8443"
+          - "https://student.oyvtp.org:8443"
+          - "https://school.oyvtp.org:8443"
+          - "https://office.oyvtp.org:8443"
         accessControlAllowMethods:
           - GET
           - POST
@@ -120,7 +124,7 @@ http:
           X-Forwaeded-Proto: "https"
         stsIncludeSubdomains: true
         stsPreload: true
-        stsSeconds: 31536000
+        stsSeconds: 63072000
         contentTypeNosniff: true
         forceSTSHeader: true
         referrerPolicy: "strict-origin-when-cross-origin"
