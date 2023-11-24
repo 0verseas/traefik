@@ -8,7 +8,7 @@ networks:
 services:
   traefik-dns:
     image: traefik:latest
-    container_name: traefik-dns
+    container_name: ${CONTAINER_NAME}
     restart: always
 #    labels:
 #      - "traefik.enable=true"
@@ -37,3 +37,16 @@ services:
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/traefik.yml:ro
+
+#  whoami:
+#    image: "traefik/whoami"
+#    container_name: "simple-service"
+#    networks:
+#      - bridge
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.whoami.rule=Host(`dev-student.overseas.ncnu.edu.tw`) && PathPrefix(`/whoami`)"
+#      - "traefik.http.routers.whoami.tls.certresolver=lets-encr"
+#      - "traefik.http.routers.whoami.entrypoints=websecure"
+#      - "traefik.http.routers.whoami.tls.options=default"
+#      - "traefik.http.routers.whoami.middlewares=secure-headers@file"
