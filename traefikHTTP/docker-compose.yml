@@ -8,7 +8,7 @@ networks:
 services:
   traefik-http:
     image: traefik:latest
-    container_name: traefik-http
+    container_name: ${CONTAINER_NAME}
     restart: always
 #    labels:
 #      - "traefik.enable=true"

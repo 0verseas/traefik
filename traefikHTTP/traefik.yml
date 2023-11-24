@@ -19,15 +19,10 @@ entryPoints:
 
   websecure:
     address: :443
-#    forwardedHeaders:
-#     trustedIPs:
-#        - "127.0.0.1/32" # localhost
-#        - "192.168.0.0/16" # stand-alone after 172.16.0.0/12 is exhausted
-#      insecure: true
 
   # "for our dev websites"
-#  webdev:
-#    address: :8443
+  webdev:
+    address: :8443
 
   # "for local api dev"
 #  apidev:
@@ -41,8 +36,7 @@ providers:
   # "provide traefik docker sock for listen and watch"
   docker:
     endpoint: "unix:///var/run/docker.sock"
-    #exposedByDefault: false
-    watch: true
+    exposedByDefault: false
   # "provide traefik SubDirectory(Path) config"
   file:
     # "watch for dynamic configuration changes"
@@ -54,7 +48,7 @@ certificatesResolvers:
   lets-encr:
     acme:
       storage: letsencrypt/acme.json
-      email: joerenyu93@gmail.com 
+      email: overseas@mail.ncnu.edu.tw
       
       # "letsencrypt certificate official server, don't use this server for multiple apply certificates at the same time, if do will trigger RateLimit, this server is not for test apply certificates"
       caServer: https://acme-v02.api.letsencrypt.org/directory
@@ -87,7 +81,7 @@ tls:
 
 http:
   middlewares:
-    test-ipwhitelist:
+    ipwhitelist:
       ipWhiteList:
         sourceRange:
           - "10.9.0.0/16"
@@ -95,13 +89,31 @@ http:
       compress: {}
 #        excludedContentTypes:
 #          - text/html
-    secure-headers:
+    cors:
       headers:
-        accesscontrolallowmethods: 
+        accessControlAllowOriginList:
+          - "https://api.overseas.ncnu.edu.tw"
+          - "https://student.overseas.ncnu.edu.tw"
+          - "https://school.overseas.ncnu.edu.tw"
+          - "https://office.overseas.ncnu.edu.tw"
+          - "https://api.overseas.ncnu.edu.tw:8443"
+          - "https://student.overseas.ncnu.edu.tw:8443"
+          - "https://school.overseas.ncnu.edu.tw:8443"
+          - "https://office.overseas.ncnu.edu.tw:8443"
+        accessControlAllowMethods:
           - GET
           - POST
+          - DELETE
+          - PUT
+          - PATCH
+        accessControlAllowHeaders: 
+          - "Content-Type"
+          - "Authorization"
+        accessControlAllowCredentials: true
         accessControlMaxAge: 100
         addVaryHeader: true
+    secure-headers:
+      headers:
         hostsProxyHeaders: "X-Forwarded-Host"
 #        sslRedirect: true
         frameDeny: true
@@ -114,9 +126,7 @@ http:
         contentTypeNosniff: true
         forceSTSHeader: true
         referrerPolicy: "strict-origin-when-cross-origin"
-        contentSecurityPolicy: default-src 'self'; manifest-src 'self' https://api.overseas.ncnu.edu.tw; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdn.jsdelivr.net/gh/CarlosBonetti/ https://cdn.jsdelivr.net/bootstrap-sortable/ https://cdnjs.cloudflare.com/ajax/libs/popper.js/ https://cdnjs.cloudflare.com/ajax/libs/tether/ https://cdnjs.cloudflare.com/ajax/libs/moment.js/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/ https://cdnjs.cloudflare.com/ajax/libs/vue/ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/ https://cdnjs.cloudflare.com/ajax/libs/js-sha256/ https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/ https://code.jquery.com https://cdn.polyfill.io https://rawgit.com https://www.google.com/recaptcha/ https://connect.facebook.net https://cdnjs.cloudflare.com/ajax/libs/date-fns/ https://cdnjs.cloudflare.com/ajax/libs/xlsx/ https://cdn.jsdelivr.net/gh/emn178/ https://cdnjs.cloudflare.com/ajax/libs/jquery-easy-loading/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/ https://www.googletagmanager.com/gtm.js https://www.google-analytics.com/analytics.js https://www.gstatic.com/recaptcha/releases/ https://cdnjs.cloudflare.com/ajax/libs/paginationjs/ https://cdnjs.cloudflare.com/ajax/libs/jschardet/ https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/ https://cdnjs.cloudflare.com/ajax/libs/quagga/ https://www.googletagmanager.com/gtag/ https://cdnjs.cloudflare.com/ajax/libs/jqueryui/; style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.gstatic.com https://use.fontawesome.com https://code.jquery.com; font-src 'self' https://cdnjs.cloudflare.com https://use.fontawesome.com data:; frame-src https://dev-api.overseas.ncnu.edu.tw:* https://www.googletagmanager.com https://www.facebook.com https://www.google.com; frame-ancestors https://*.overseas.ncnu.edu.tw https://www.googletagmanager.com https://www.google.com; object-src 'self' https://dev-api.overseas.ncnu.edu.tw/editors/add-new-department-apply-list/file/ https://dev-api.overseas.ncnu.edu.tw/admins/school-apply-list/; img-src 'self' https://api.overseas.ncnu.edu.tw:* https://www.google-analytics.com https://cmn-hant.overseas.ncnu.edu.tw:* https://dev-api.overseas.ncnu.edu.tw/editors/add-new-department-apply-list/file/ data:; connect-src 'self' https://dev-api.overseas.ncnu.edu.tw:* https://www.google-analytics.com/j/ https://stats.g.doubleclick.net/j/; worker-src 'self' blob:;
-#        accessControlAllowOriginList: '*'
-#          - https://dev-api.overseas.ncnu.edu.tw
+        contentSecurityPolicy: default-src 'self'; manifest-src 'self' https://api.overseas.ncnu.edu.tw; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdn.jsdelivr.net/gh/CarlosBonetti/ https://cdn.jsdelivr.net/bootstrap-sortable/ https://cdnjs.cloudflare.com/ajax/libs/popper.js/ https://cdnjs.cloudflare.com/ajax/libs/tether/ https://cdnjs.cloudflare.com/ajax/libs/moment.js/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/ https://cdnjs.cloudflare.com/ajax/libs/vue/ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/ https://cdnjs.cloudflare.com/ajax/libs/js-sha256/ https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/ https://code.jquery.com https://cdn.polyfill.io https://rawgit.com https://www.google.com/recaptcha/ https://connect.facebook.net https://cdnjs.cloudflare.com/ajax/libs/date-fns/ https://cdnjs.cloudflare.com/ajax/libs/xlsx/ https://cdn.jsdelivr.net/gh/emn178/ https://cdnjs.cloudflare.com/ajax/libs/jquery-easy-loading/ https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/ https://www.googletagmanager.com/gtm.js https://www.google-analytics.com/analytics.js https://www.gstatic.com/recaptcha/releases/ https://cdnjs.cloudflare.com/ajax/libs/paginationjs/ https://cdnjs.cloudflare.com/ajax/libs/jschardet/ https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/ https://cdnjs.cloudflare.com/ajax/libs/quagga/ https://www.googletagmanager.com/gtag/ https://cdnjs.cloudflare.com/ajax/libs/jqueryui/; style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.gstatic.com https://use.fontawesome.com https://code.jquery.com; font-src 'self' https://cdnjs.cloudflare.com https://use.fontawesome.com data:; frame-src https://api.overseas.ncnu.edu.tw:* https://www.googletagmanager.com https://www.facebook.com https://www.google.com; frame-ancestors https://*.overseas.ncnu.edu.tw https://www.googletagmanager.com https://www.google.com; object-src 'self' https://api.overseas.ncnu.edu.tw/editors/add-new-department-apply-list/file/ https://api.overseas.ncnu.edu.tw/admins/school-apply-list/; img-src 'self' https://api.overseas.ncnu.edu.tw:* https://www.google-analytics.com https://cmn-hant.overseas.ncnu.edu.tw:* https://api.overseas.ncnu.edu.tw/editors/add-new-department-apply-list/file/ data:; connect-src 'self' https://api.overseas.ncnu.edu.tw:* https://www.google-analytics.com/j/ https://stats.g.doubleclick.net/j/; worker-src 'self' blob:;
     wp-secure-headers:
       headers:
         accesscontrolallowmethods:
