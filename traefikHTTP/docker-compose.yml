@@ -22,7 +22,8 @@ services:
 #      - "traefik.http.middlewares.basic-auth-global.basicauth.users=${AUTH_BASIC}"
 #      - "traefik.http.routers.api.tls.domains[0].main=*.overseas.edu.tw"
 #      - "traefik.http.routers.api.tls.domains[0].sans=overseas.edu.tw"
-#    environment:
+    environment:
+      - TZ=Asia/Taipei
 #      - "CF_API_EMAIL=${CF_API_EMAIL}"
 #      - "CF_API_KEY=${CF_API_KEY}"
     ports:
