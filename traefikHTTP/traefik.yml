@@ -1,6 +1,12 @@
 log:
   level: INFO
 
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  fields:
+    names:
+      StartUTC: drop
+
 api:
   # "insecure config is true will allow using IP & Http protocol connect Traefik Dashboard. Don't do this in production! "
   insecure: true
@@ -120,7 +126,7 @@ http:
         frameDeny: true
         browserXssFilter: true
         sslProxyHeaders:
-          X-Forwaeded-Proto: "https"
+          X-Forwarded-Proto: "https"
         stsIncludeSubdomains: true
         stsPreload: true
         stsSeconds: 63072000
