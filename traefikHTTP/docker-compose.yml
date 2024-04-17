@@ -47,6 +47,7 @@ services:
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/traefik.yml
+      - ./traefik_logs:/var/log/traefik/
 
 #  whoami:
 #    image: "traefik/whoami"
